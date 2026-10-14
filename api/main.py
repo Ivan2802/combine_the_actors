@@ -1,11 +1,13 @@
 from fastapi import FastAPI
 from requests import *
+from os import getenv
 
 app = FastAPI()
 
 app.frontend("/", directory="src")
 
-headers = {"Authorization": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIwM2Y2MDc2ZjU2OWZmYWFhNjNmYjE4YWUyZDVhMzdlNSIsIm5iZiI6MTc4ODEyODY1My4zNCwic3ViIjoiNmE5NGFkOGRkNDQwMjFkMmM0MjlhMzgzIiwic2NvcGVzIjpbImFwaV9yZWFkIl0sInZlcnNpb24iOjF9.I4REXF0dpza3vZynsR3aVhGxBzMc1tMoVHJIwyEhhK8"}
+API_KEY = getenv("API_KEY")
+headers = {"Authorization": API_KEY}
 
 def get_actor_id(actor_name):
     url_actor_name = f"https://api.themoviedb.org/3/search/person?query={actor_name}"
