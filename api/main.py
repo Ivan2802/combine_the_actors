@@ -1,12 +1,15 @@
 from fastapi import FastAPI
 from requests import *
+from dotenv import load_dotenv
 from os import getenv
 
 app = FastAPI()
 
 app.frontend("/", directory="src")
 
+load_dotenv()
 API_KEY = getenv("API_KEY")
+
 headers = {"Authorization": API_KEY}
 
 def get_actor_id(actor_name):
@@ -39,7 +42,7 @@ def main(name1, name2):
     name2 = name2.replace(" ", "+")
     actor_id_2 = get_actor_id(name2)
     actors_films_2 = get_actors_films_by_id(actor_id_2)
-    if actors_films_1 != -1 and actor_id_2 != -1:
+    if actors_films_1 != -1 and actors_films_2 != -1:
         return list(set(actors_films_1) & set(actors_films_2))
     else:
         return ["ERROR"]
