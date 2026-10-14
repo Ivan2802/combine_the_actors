@@ -4,7 +4,8 @@ button = document.querySelector(".btn")
 btn_add = document.querySelector(".btn_add")
 result = document.querySelector(".result")
 
-const SERVER = "http://127.0.0.1:8000/"
+// const SERVER = "http://127.0.0.1:8000/"
+const SERVER = "https://combine-the-actors.de2.netrun.io/"
 
 function make_request() {
     console.log(`get_artist/${artist_1.value}/${artist_2.value}`)
