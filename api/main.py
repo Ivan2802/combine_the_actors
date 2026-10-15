@@ -3,6 +3,9 @@ from requests import *
 from dotenv import load_dotenv
 from os import getenv
 
+from typing import List
+from pydantic import BaseModel
+
 app = FastAPI()
 
 app.frontend("/", directory="src")
@@ -33,16 +36,21 @@ def get_actors_films_by_id(actor_id):
             films_list.append(film['original_title'])
     return films_list
 
+class nameList(BaseModel):
+    artists: List[str]
 
-@app.get("/get_artist/{name1}/{name2}") # reshape path
-def main(name1, name2):
-    name1 = name1.replace(" ", "+")
-    actor_id_1 = get_actor_id(name1)
-    actors_films_1 = get_actors_films_by_id(actor_id_1)
-    name2 = name2.replace(" ", "+")
-    actor_id_2 = get_actor_id(name2)
-    actors_films_2 = get_actors_films_by_id(actor_id_2)
-    if actors_films_1 != -1 and actors_films_2 != -1:
-        return list(set(actors_films_1) & set(actors_films_2))
-    else:
-        return ["ERROR"]
+@app.post("/get_artist")
+async def main(names_list: nameList):
+    common_films_list = set()
+    for artist in range(len(names_list.artists)):
+        name = names_list.artists[artist]
+        name = name.replace(" ", "+")
+        actor_id = get_actor_id(name)
+        actors_films = get_actors_films_by_id(actor_id)
+        if actors_films == -1:
+            return ["ERROR"]
+        if artist == 0:
+            common_films_list = set(actors_films)
+        else:
+            common_films_list &= set(actors_films)
+    return list(common_films_list)
